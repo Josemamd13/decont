@@ -1,8 +1,11 @@
+
+file = $(basename $1)
+
 wget -P $2 $1
 
 if [ "$3" = "yes" ]
 then
-	gunzip -k $2/$(basename $1)
+	gunzip -fk $2/$file
 fi
 
 
