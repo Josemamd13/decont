@@ -1,7 +1,10 @@
+echo "Downloading files..."
 
 file = $(basename $1)
 
-wget -P $2 $1
+	wget -P $2 $1
+
+echo "Uncompressing files..."
 
 if [ "$3" = "yes" ]
 then
