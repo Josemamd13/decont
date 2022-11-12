@@ -35,6 +35,17 @@ done
 # cutadapt -m 18 -a TGGAATTCTCGGGTGCCAAGG --discard-untrimmed \
 #     -o <trimmed_file> <input_file> > <log_file>
 
+mkdir -p out/trimmed
+mkdir -p log/cutadapt
+
+for sampleid in $(ls out/merged/*.fastq.gz | cut -d "." -f1 | sed 's:out/merged/::')
+do
+	 cutadapt \
+                -m 18 \
+                -a TGGAATTCTCGGGTGCCAAGG \
+                --discard-untrimmed \
+                -o out/trimmed/${sampleid}.trimmed.fastq.gz out/merged/${sampleid}.fastq.gz > log/cutadapt/${sampleid}.log
+done
 
 # TODO: run STAR for all trimmed files
 #for fname in out/trimmed/*.fastq.gz
@@ -45,7 +56,7 @@ done
     # STAR --runThreadN 4 --genomeDir res/contaminants_idx \
     #    --outReadsUnmapped Fastx --readFilesIn <input_file> \
     #    --readFilesCommand gunzip -c --outFileNamePrefix <output_directory>
-#done 
+#done
 
 # TODO: create a log file containing information from cutadapt and star logs
 # (this should be a single log file, and information should be *appended* to it on each run)
