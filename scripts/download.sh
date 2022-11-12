@@ -1,6 +1,6 @@
 echo "Downloading files..."
 
-file = $(basename $1)
+file=$(basename $1)
 
 	wget -P $2 $1
 
@@ -8,7 +8,7 @@ echo "Uncompressing files..."
 
 if [ "$3" = "yes" ]
 then
-	gunzip -fk $2/$file
+	gunzip -k $2/$file
 fi
 
 
