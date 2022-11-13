@@ -58,6 +58,21 @@ done
     #    --readFilesCommand gunzip -c --outFileNamePrefix <output_directory>
 #done
 
+for fname in out/trimmed/*.fastq.gz
+do
+sid=$(echo $fname | sed 's:out/trimmed/::' | cut -d "." -f1)
+
+mkdir -p out/star/$sid
+
+	   STAR \
+                --runThreadN 8 \
+                --genomeDir res/contaminants_idx \
+		--outReadsUnmapped Fastx \
+                --readFilesIn ${fname} \
+                --readFilesCommand gunzip -c \
+                --outFileNamePrefix out/star/${sid}
+done
+
 # TODO: create a log file containing information from cutadapt and star logs
 # (this should be a single log file, and information should be *appended* to it on each run)
 # - cutadapt: Reads with adapters and total basepairs
