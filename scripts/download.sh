@@ -4,6 +4,8 @@ file=$(basename $1)
 
 	wget -P $2 $1
 
+echo
+
 echo "Uncompressing files..."
 
 if [ "$3" = "yes" ]
@@ -11,6 +13,7 @@ then
 	gunzip -k $2/$file
 fi
 
+echo
 
 # This script should download the file specified in the first argument ($1),
 # place it in the directory specified in the second argument ($2),
