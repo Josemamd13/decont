@@ -1,16 +1,4 @@
-echo "Running STAR index..."
-
-mkdir -p res/contaminants_idx
-
-	STAR \
-		--runThreadN 8 \
-		--runMode genomeGenerate \
-		--genomeDir $2 \
-		--genomeFastaFiles $1 \
-		--genomeSAindexNbases 9
-
-echo
-
+###INDEX SCRIPT CREATED BY JOSE MANUEL MUÑOZ ###
 
 # This script should index the genome file specified in the first argument ($1),
 # creating the index in a directory specified by the second argument ($2).
@@ -20,3 +8,13 @@ echo
 
 # STAR --runThreadN 4 --runMode genomeGenerate --genomeDir <outdir> \
 # --genomeFastaFiles <genomefile> --genomeSAindexNbases 9
+
+
+mkdir -p res/contaminants_idx
+
+	STAR \
+		--runThreadN 8 \
+		--runMode genomeGenerate \
+		--genomeDir $2 \
+		--genomeFastaFiles $1 \
+		--genomeSAindexNbases 9
