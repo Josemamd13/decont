@@ -62,17 +62,17 @@ echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
 
 echo -e "\n~~~~~ Running cutadapt... ~~~~~\n"
 
-if [ -e out/trimmed/${sid}.trimmed.fastq.gz ]
-then
-	echo "${sid} already trimmed."
-	continue
-fi
-
 mkdir -p out/trimmed
 mkdir -p log/cutadapt
 
 for sid in $(ls out/merged/*.fastq.gz | cut -d "." -f1 | sed 's:out/merged/::')
 do
+	if [ -e out/trimmed/${sid}.trimmed.fastq.gz ]
+	then
+        	echo "${sid} already trimmed."
+        	continue
+	fi
+
 	 cutadapt \
                 -m 18 \
                 -a TGGAATTCTCGGGTGCCAAGG \
@@ -95,16 +95,15 @@ echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
 
 echo -e "\n~~~~~ Running STAR... ~~~~~\n"
 
-if [ -e out/star/${sid} ]
-then
-	echo "STAR already done."
-	continue
-fi
-
 for fname in out/trimmed/*.fastq.gz
 do
+	sid=$(echo $fname | sed 's:out/trimmed/::' | cut -d "." -f1)
 
-sid=$(echo $fname | sed 's:out/trimmed/::' | cut -d "." -f1)
+	if [ -e out/star/$sid1/ ]
+	then
+        	echo "STAR already done."
+        	continue
+	fi
 
 mkdir -p out/star/$sid
 
