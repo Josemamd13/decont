@@ -10,6 +10,12 @@ file=$(basename $1)
 # and *optionally*:
 # - uncompress the downloaded file with gunzip if the third
 #   argument ($3) contains the word "yes"
+
+if [ "$3" = "yes" ]
+then
+	gunzip -k $2/$file
+fi
+
 # - filter the sequences based on a word contained in their header lines:
 #   sequences containing the specified word in their header should be **excluded**
 #
@@ -24,9 +30,9 @@ file=$(basename $1)
 #
 #   If $4 == "another" only the **first two sequence** should be output
 
+file_uncompress=$(basename $file .gz)
 
-if [ "$3" = "yes" ]
+if [ "$4" = "filter" ]
 then
-	gunzip -k $2/$file
+	seqkit grep -v -r -p "filter" -n $2/$file > $2/$file_uncompress
 fi
-
