@@ -4,7 +4,7 @@ echo -e "\n\n~~~ Pipeline started at $(date +'%H:%M:%S')... ~~~\n\n"
 
 #Run cleanup script at the beginning to ensure that data is not duplicated
 
-bash scripts/cleanup.sh 2>> log/errors.log
+#bash scripts/cleanup.sh 2>> log/errors.log
 
 #Download all the files specified in data/filenames
 #for url in $(<list_of_urls>) #TODO
@@ -46,11 +46,11 @@ echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
 #    bash scripts/merge_fastqs.sh data out/merged $sid
 #done
 
-echo -e "\n~~~~~ Merging compressed files... ~~~~~\n"
+echo -e "\n~~~~~ Merging compressed files... ~~~~~"
 
 for sid in $(ls data/*.fastq.gz | cut -d "-" -f1 | sed 's:data/::' | sort | uniq)
 do
-	echo -e "Merging $sid sample... \n"
+	echo -e "\nMerging $sid sample... \n"
 	bash scripts/merge_fastqs.sh data out/merged $sid
 done
 
@@ -61,6 +61,12 @@ echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
 #     -o <trimmed_file> <input_file> > <log_file>
 
 echo -e "\n~~~~~ Running cutadapt... ~~~~~\n"
+
+if [ -e out/trimmed/${sid}.trimmed.fastq.gz ]
+then
+	echo "${sid} already trimmed."
+	continue
+fi
 
 mkdir -p out/trimmed
 mkdir -p log/cutadapt
@@ -89,6 +95,12 @@ echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
 
 echo -e "\n~~~~~ Running STAR... ~~~~~\n"
 
+if [ -e out/star/${sid} ]
+then
+	echo "STAR already done."
+	continue
+fi
+
 for fname in out/trimmed/*.fastq.gz
 do
 
@@ -115,6 +127,12 @@ echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
 
 echo -e "\n~~~~~ Creating a log file containing information from cutadapt and STAR logs... ~~~~~\n"
 
+if [ -e log/pipeline.log ]
+then
+	echo "Pipeline already done."
+	continue
+fi
+
 for sid in $(ls data/*.fastq.gz | cut -d "-" -f1 | sed 's:data/::' | sort | uniq)
 do
 	echo "Sample: " $sid >> log/pipeline.log
@@ -136,6 +154,12 @@ done
 echo -e "\n\t\t\t~~~~~ Log file created. ~~~~~\n"
 
 echo -e "\n~~~~~ Saving the environment... ~~~~~\n"
+
+if [ -e envs/decont.yaml ]
+then
+	echo "Environment already saved."
+	continue
+fi
 
 mkdir -p envs
 
