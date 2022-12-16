@@ -5,6 +5,12 @@
 
 file=$(basename $1)
 
+if [ -e $2/$file ]
+then
+	echo "File $file already downloaded."
+	exit 0
+fi
+
 	wget -P $2 $1
 
 # and *optionally*:
