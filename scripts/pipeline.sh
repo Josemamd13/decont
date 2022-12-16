@@ -4,7 +4,7 @@ echo -e "\n\n### Pipeline started at $(date +'%H:%M:%S') ###\n\n"
 
 #Run cleanup script at the beginning to ensure that data is not duplicated
 
-bash scripts/cleanup.sh 2>> log/errors.log
+#bash scripts/cleanup.sh 2>> log/errors.log
 
 #Download all the files specified in data/filenames
 #for url in $(<list_of_urls>) #TODO
@@ -27,7 +27,7 @@ echo -e "\n\t\t###### Done. #####\n"
 
 echo -e "\n##### Uncompressing files... #####\n"
 
-bash scripts/download.sh https://bioinformatics.cnio.es/data/courses/decont/contaminants.fasta.gz res yes
+bash scripts/download.sh https://bioinformatics.cnio.es/data/courses/decont/contaminants.fasta.gz res yes filter
 
 echo -e "\n\t\t##### Done. #####\n"
 
