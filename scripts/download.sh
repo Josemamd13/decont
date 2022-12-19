@@ -7,7 +7,7 @@ file=$(basename $1)
 
 if [ -e $2/$file ]
 then
-	echo "File $file already downloaded."
+	echo "File $file has already been downloaded."
 	exit 0
 fi
 
