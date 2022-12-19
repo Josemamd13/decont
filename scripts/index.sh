@@ -11,7 +11,7 @@
 
 if [ -e $2 ]
 then
-	echo "Index already created."
+	echo "Index has already been created."
 	exit 0
 fi
 
