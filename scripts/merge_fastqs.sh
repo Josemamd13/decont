@@ -5,7 +5,7 @@
 # stored in the output directory specified by the second argument ($2).
 #
 # The directory containing the samples is indicated by the first argument ($1).
-
+##Define variables:
 inputdir=$1
 outputdir=$2
 sid=$3
