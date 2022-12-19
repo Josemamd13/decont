@@ -129,14 +129,14 @@ do
 	echo "------------------" >> log/pipeline.log
 
 	echo "Cutadapt: " >> log/pipeline.log
-	echo $(cat log/cutadapt/$sid.log | grep -e "Reads with adapters") >> log/pipeline.log
-	echo $(cat log/cutadapt/$sid.log | grep -e "Total basepairs") >> log/pipeline.log
+	echo $(cat log/cutadapt/$sid.log | egrep "Reads with adapters") >> log/pipeline.log
+	echo $(cat log/cutadapt/$sid.log | egrep "Total basepairs") >> log/pipeline.log
 	echo -e "\n" >> log/pipeline.log
 
 	echo "STAR: " >> log/pipeline.log
-	echo $(cat out/star/$sid/Log.final.out | grep -e "Uniquely mapped reads %") >> log/pipeline.log
-	echo $(cat out/star/$sid/Log.final.out | grep -e "% of reads mapped to multiple loci") >> log/pipeline.log
-	echo $(cat out/star/$sid/Log.final.out | grep -e "% of reads mapped to too many loci") >> log/pipeline.log
+	echo $(cat out/star/$sid/Log.final.out | egrep "Uniquely mapped reads %") >> log/pipeline.log
+	echo $(cat out/star/$sid/Log.final.out | egrep "% of reads mapped to multiple loci") >> log/pipeline.log
+	echo $(cat out/star/$sid/Log.final.out | egrep "% of reads mapped to too many loci") >> log/pipeline.log
 	
 	echo -e "\n" >>log/pipeline.log
 done
