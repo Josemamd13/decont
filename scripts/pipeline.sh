@@ -2,8 +2,7 @@
 
 echo -e "\n\n~~~ Pipeline started at $(date +'%H:%M:%S')... ~~~\n\n"
 
-#Run cleanup script at the beginning to ensure that data is not duplicated
-
+#Run cleanup script at the beginning to ensure that data is not duplicated.
 bash scripts/cleanup.sh 2>> log/errors.log
 
 #Download all the files specified in data/filenames
@@ -11,7 +10,6 @@ bash scripts/cleanup.sh 2>> log/errors.log
 #do
 #    bash scripts/download.sh $url data
 #done
-
 echo -e "\n~~~~~ Downloading files... ~~~~~\n"
 
 for url in $(cat data/urls)
@@ -24,7 +22,6 @@ echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
 # Download the contaminants fasta file, uncompress it, and
 # filter to remove all small nuclear RNAs
 #bash scripts/download.sh <contaminants_url> res yes #TODO
-
 echo -e "\n~~~~~ Uncompressing files... ~~~~~\n"
 
 bash scripts/download.sh https://bioinformatics.cnio.es/data/courses/decont/contaminants.fasta.gz res yes filter
@@ -33,7 +30,6 @@ echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
 
 # Index the contaminants file
 #bash scripts/index.sh res/contaminants.fasta res/contaminants_idx
-
 echo -e "\n~~~~~ Running STAR index... ~~~~~\n"
 
 bash scripts/index.sh res/contaminants.fasta res/contaminants_idx
@@ -45,7 +41,6 @@ echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
 #do
 #    bash scripts/merge_fastqs.sh data out/merged $sid
 #done
-
 echo -e "\n~~~~~ Merging compressed files... ~~~~~"
 
 for sid in $(ls data/*.fastq.gz | cut -d "-" -f1 | sed 's:data/::' | sort | uniq)
@@ -59,7 +54,6 @@ echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
 # TODO: run cutadapt for all merged files
 # cutadapt -m 18 -a TGGAATTCTCGGGTGCCAAGG --discard-untrimmed \
 #     -o <trimmed_file> <input_file> > <log_file>
-
 echo -e "\n~~~~~ Running cutadapt... ~~~~~\n"
 
 mkdir -p out/trimmed
@@ -67,7 +61,7 @@ mkdir -p log/cutadapt
 
 for sid in $(ls out/merged/*.fastq.gz | cut -d "." -f1 | sed 's:out/merged/::')
 do
-	if [ -e out/trimmed/${sid}.trimmed.fastq.gz ]
+	if [ -e out/trimmed/${sid}.trimmed.fastq.gz ] ##Check if the file already exists
 	then
         	echo "Sample $sid has already been trimmed."
         	continue
@@ -92,14 +86,13 @@ echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
     #    --outReadsUnmapped Fastx --readFilesIn <input_file> \
     #    --readFilesCommand gunzip -c --outFileNamePrefix <output_directory>
 #done
-
 echo -e "\n~~~~~ Running STAR... ~~~~~\n"
 
 for fname in out/trimmed/*.fastq.gz
 do
 	sid=$(echo $fname | sed 's:out/trimmed/::' | cut -d "." -f1)
 
-	if [ -e out/star/$sid/ ]
+	if [ -e out/star/$sid/ ] ##Check if the file already exists.
 	then
         	echo "STAR alignment for sample $sid has already been done."
         	continue
@@ -111,9 +104,9 @@ mkdir -p out/star/$sid
                 --runThreadN 8 \
                 --genomeDir res/contaminants_idx \
 		--outReadsUnmapped Fastx \
-                --readFilesIn ${fname} \
+                --readFilesIn $fname \
                 --readFilesCommand gunzip -c \
-                --outFileNamePrefix out/star/${sid}/
+                --outFileNamePrefix out/star/$sid/
 done
 
 echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
@@ -123,10 +116,9 @@ echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
 # - cutadapt: Reads with adapters and total basepairs
 # - star: Percentages of uniquely mapped reads, reads mapped to multiple loci, and to too many loci
 # tip: use grep to filter the lines you're interested in
-
 echo -e "\n~~~~~ Creating a log file containing information from cutadapt and STAR logs... ~~~~~\n"
 
-if [ -e log/pipeline.log ]
+if [ -e log/pipeline.log ] ##Check if the file already exists.
 then
 	echo "Pipeline has already been done."
 fi
@@ -152,8 +144,7 @@ done
 echo -e "\n\t\t\t~~~~~ Log file created. ~~~~~\n"
 
 echo -e "\n~~~~~ Saving the environment... ~~~~~\n"
-
-if [ -e envs/decont.yaml ]
+if [ -e envs/decont.yaml ] ##Check if the file already exists.
 then
 	echo "The environment has already been saved."
 fi
