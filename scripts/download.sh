@@ -2,10 +2,9 @@
 
 # This script should download the file specified in the first argument ($1),
 # place it in the directory specified in the second argument ($2),
-
 file=$(basename $1)
 
-if [ -e $2/$file ]
+if [ -e $2/$file ] ##Check if the file already exists.
 then
 	echo "File $file has already been downloaded."
 	exit 0
