@@ -8,7 +8,7 @@
 
 if [ -e $2/$3.fastq.gz ]
 then
-	echo "Merged already done."
+	echo "The merger has already been made."
 	exit 0
 fi
 
