@@ -6,7 +6,11 @@
 #
 # The directory containing the samples is indicated by the first argument ($1).
 
-if [ -e $2/$3.fastq.gz ]
+inputdir=$1
+outputdir=$2
+sid=$3
+
+if [ -e $2/$3.fastq.gz ] ##Check if the file already exists.
 then
 	echo "The merger has already been made."
 	exit 0
