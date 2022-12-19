@@ -2,6 +2,7 @@
 
 # This script should download the file specified in the first argument ($1),
 # place it in the directory specified in the second argument ($2),
+##Define variables:
 file=$(basename $1)
 
 if [ -e $2/$file ] ##Check if the file already exists.
@@ -34,7 +35,7 @@ fi
 #   CCAGGATTTACAGACTTTAAA
 #
 #   If $4 == "another" only the **first two sequence** should be output
-
+##Define variables:
 file_uncompress=$(basename $file .gz)
 
 if [ "$4" = "filter" ]
