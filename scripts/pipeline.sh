@@ -4,7 +4,7 @@ echo -e "\n\n~~~ Pipeline started at $(date +'%H:%M:%S')... ~~~\n\n"
 
 #Run cleanup script at the beginning to ensure that data is not duplicated
 
-#bash scripts/cleanup.sh 2>> log/errors.log
+bash scripts/cleanup.sh 2>> log/errors.log
 
 #Download all the files specified in data/filenames
 #for url in $(<list_of_urls>) #TODO
@@ -69,7 +69,7 @@ for sid in $(ls out/merged/*.fastq.gz | cut -d "." -f1 | sed 's:out/merged/::')
 do
 	if [ -e out/trimmed/${sid}.trimmed.fastq.gz ]
 	then
-        	echo "${sid} already trimmed."
+        	echo "Sample $sid has already been trimmed."
         	continue
 	fi
 
@@ -99,9 +99,9 @@ for fname in out/trimmed/*.fastq.gz
 do
 	sid=$(echo $fname | sed 's:out/trimmed/::' | cut -d "." -f1)
 
-	if [ -e out/star/$sid1/ ]
+	if [ -e out/star/$sid/ ]
 	then
-        	echo "STAR already done."
+        	echo "STAR alignment for sample $sid has already been done."
         	continue
 	fi
 
@@ -128,8 +128,7 @@ echo -e "\n~~~~~ Creating a log file containing information from cutadapt and ST
 
 if [ -e log/pipeline.log ]
 then
-	echo "Pipeline already done."
-	continue
+	echo "Pipeline has already been done."
 fi
 
 for sid in $(ls data/*.fastq.gz | cut -d "-" -f1 | sed 's:data/::' | sort | uniq)
@@ -156,8 +155,7 @@ echo -e "\n~~~~~ Saving the environment... ~~~~~\n"
 
 if [ -e envs/decont.yaml ]
 then
-	echo "Environment already saved."
-	continue
+	echo "The environment has already been saved."
 fi
 
 mkdir -p envs
