@@ -8,7 +8,7 @@
 
 # STAR --runThreadN 4 --runMode genomeGenerate --genomeDir <outdir> \
 # --genomeFastaFiles <genomefile> --genomeSAindexNbases 9
-##Define variables:
+##Variables are defined:
 genomefile=$1
 outdir=$2
 
