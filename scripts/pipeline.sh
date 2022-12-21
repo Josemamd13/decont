@@ -3,7 +3,7 @@
 echo -e "\n\n~~~ Pipeline started at $(date +'%H:%M:%S')... ~~~\n\n"
 
 #Run cleanup script at the beginning to ensure that data is not duplicated.
-bash scripts/cleanup.sh 2>> log/errors.log
+#bash scripts/cleanup.sh 2>> log/errors.log
 
 #Download all the files specified in data/filenames
 #for url in $(<list_of_urls>) #TODO
@@ -12,17 +12,14 @@ bash scripts/cleanup.sh 2>> log/errors.log
 #done
 echo -e "\n~~~~~ Downloading files... ~~~~~\n"
 
-for url in $(cat data/urls)
-do
-	bash scripts/download.sh $url data
-done
+bash scripts/download.sh data/urls data
 
 echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
 
 # Download the contaminants fasta file, uncompress it, and
 # filter to remove all small nuclear RNAs
 #bash scripts/download.sh <contaminants_url> res yes #TODO
-echo -e "\n~~~~~ Uncompressing files... ~~~~~\n"
+echo -e "\n~~~~~ Downloading, uncompressing and filtering the contaminants fasta files... ~~~~~\n"
 
 bash scripts/download.sh https://bioinformatics.cnio.es/data/courses/decont/contaminants.fasta.gz res yes filter
 
@@ -43,6 +40,7 @@ echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
 #done
 echo -e "\n~~~~~ Merging compressed files... ~~~~~"
 
+##sid is defined:
 for sid in $(ls data/*.fastq.gz | cut -d "-" -f1 | sed 's:data/::' | sort | uniq)
 do
 	echo -e "\nMerging $sid sample... \n"
@@ -59,6 +57,7 @@ echo -e "\n~~~~~ Running cutadapt... ~~~~~\n"
 mkdir -p out/trimmed
 mkdir -p log/cutadapt
 
+##sid is defined:
 for sid in $(ls out/merged/*.fastq.gz | cut -d "." -f1 | sed 's:out/merged/::')
 do
 	if [ -e out/trimmed/${sid}.trimmed.fastq.gz ] ##Check if the file already exists
@@ -88,8 +87,10 @@ echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
 #done
 echo -e "\n~~~~~ Running STAR... ~~~~~\n"
 
+##fname is defined:
 for fname in out/trimmed/*.fastq.gz
 do
+	##sid is defined:
 	sid=$(echo $fname | sed 's:out/trimmed/::' | cut -d "." -f1)
 
 	if [ -e out/star/$sid/ ] ##Check if the file already exists.
@@ -123,6 +124,7 @@ then
 	echo "Pipeline has already been done."
 fi
 
+##sid is defined:
 for sid in $(ls data/*.fastq.gz | cut -d "-" -f1 | sed 's:data/::' | sort | uniq)
 do
 	echo "Sample: " $sid >> log/pipeline.log
@@ -137,7 +139,7 @@ do
 	echo $(cat out/star/$sid/Log.final.out | egrep "Uniquely mapped reads %") >> log/pipeline.log
 	echo $(cat out/star/$sid/Log.final.out | egrep "% of reads mapped to multiple loci") >> log/pipeline.log
 	echo $(cat out/star/$sid/Log.final.out | egrep "% of reads mapped to too many loci") >> log/pipeline.log
-	
+
 	echo -e "\n" >>log/pipeline.log
 done
 
