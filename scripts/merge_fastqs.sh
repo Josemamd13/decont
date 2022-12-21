@@ -5,9 +5,9 @@
 # stored in the output directory specified by the second argument ($2).
 #
 # The directory containing the samples is indicated by the first argument ($1).
-##Define variables:
-inputdir=$1
-outputdir=$2
+##Variables are defined:
+indir=$1
+outdir=$2
 sid=$3
 
 if [ -e $2/$3.fastq.gz ] ##Check if the file already exists.
