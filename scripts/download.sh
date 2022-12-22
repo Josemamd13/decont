@@ -8,10 +8,10 @@ outdir=$2
 file=$(basename $1)
 fileuncompress=$(basename $file .gz)
 
-if [ -f "$1" ] ## Ensure that the first argument is a file.
+if [ -f "$1" ]
 then
 
-    if [ $(ls $2/*.fastq.gz 2>> data/errors.txt | wc -l ) -eq $(cat $1 | wc -l) ] ## Check if the file already exists.
+    if [ $(ls $2/*.fastq.gz 2>> /dev/null | wc -l ) -eq $(cat $1 | wc -l) ] ## Check if the file already exists.
     then
 
         echo "The files have already been downloaded."
@@ -38,7 +38,7 @@ then
     fi
 
 else
-    if [ -e $2/$file ] ## Check if the file already exists.
+    if [ -e $2/$file ]
     then
 
         echo "The file have already been downloaded, uncompressed and filtered."
