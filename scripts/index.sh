@@ -12,7 +12,7 @@
 genomefile=$1
 outdir=$2
 
-if [ -e $2 ] ##Check if the file already exists.
+if [ -e $2 ]
 then
 	echo "Index has already been created."
 	exit 0
