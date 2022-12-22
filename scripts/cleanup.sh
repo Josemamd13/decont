@@ -1,6 +1,6 @@
 ###CLEANUP SCRIPT BY José Manuel Muñoz###
 
-#If we do not pass any argument to the script, what it will do is to delete all 
+#If we do not pass any argument to the script, what it will do is to delete all
 #the files that it finds with a depth of 1, except for those that we protect (!)
 if [ "$#" -eq 0 ]
 then
