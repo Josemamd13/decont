@@ -40,7 +40,6 @@ echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
 #done
 echo -e "\n~~~~~ Merging compressed files... ~~~~~"
 
-##sid is defined:
 for sid in $(ls data/*.fastq.gz | cut -d "-" -f1 | sed 's:data/::' | sort | uniq)
 do
 	echo -e "\nMerging $sid sample... \n"
@@ -54,13 +53,12 @@ echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
 #     -o <trimmed_file> <input_file> > <log_file>
 echo -e "\n~~~~~ Running cutadapt... ~~~~~\n"
 
-mkdir -p out/trimmed
-mkdir -p log/cutadapt
+	mkdir -p out/trimmed
+	mkdir -p log/cutadapt
 
-##sid is defined:
 for sid in $(ls out/merged/*.fastq.gz | cut -d "." -f1 | sed 's:out/merged/::')
 do
-	if [ -e out/trimmed/${sid}.trimmed.fastq.gz ] ##Check if the file already exists
+	if [ -e out/trimmed/${sid}.trimmed.fastq.gz ]
 	then
         	echo "Sample $sid has already been trimmed."
         	continue
@@ -87,19 +85,18 @@ echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
 #done
 echo -e "\n~~~~~ Running STAR... ~~~~~\n"
 
-##fname is defined:
 for fname in out/trimmed/*.fastq.gz
 do
-	##sid is defined:
+
 	sid=$(echo $fname | sed 's:out/trimmed/::' | cut -d "." -f1)
 
-	if [ -e out/star/$sid/ ] ##Check if the file already exists.
+	if [ -e out/star/$sid/ ]
 	then
         	echo "STAR alignment for sample $sid has already been done."
         	continue
 	fi
 
-mkdir -p out/star/$sid
+	mkdir -p out/star/$sid
 
 	   STAR \
                 --runThreadN 8 \
@@ -119,12 +116,11 @@ echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
 # tip: use grep to filter the lines you're interested in
 echo -e "\n~~~~~ Creating a log file containing information from cutadapt and STAR logs... ~~~~~\n"
 
-if [ -e log/pipeline.log ] ##Check if the file already exists.
+if [ -e log/pipeline.log ]
 then
 	echo "Pipeline has already been done."
 fi
 
-##sid is defined:
 for sid in $(ls data/*.fastq.gz | cut -d "-" -f1 | sed 's:data/::' | sort | uniq)
 do
 	echo "Sample: " $sid >> log/pipeline.log
@@ -143,18 +139,18 @@ do
 	echo -e "\n" >>log/pipeline.log
 done
 
-echo -e "\n\t\t\t~~~~~ Log file created. ~~~~~\n"
+echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
 
 echo -e "\n~~~~~ Saving the environment... ~~~~~\n"
-if [ -e envs/decont.yaml ] ##Check if the file already exists.
+if [ -e envs/decont.yaml ]
 then
 	echo "The environment has already been saved."
 fi
 
-mkdir -p envs
+	mkdir -p envs
 
-conda env export > envs/decont.yaml
+	conda env export > envs/decont.yaml
 
-echo -e "\n\t\t\t~~~~~ Environment saved. ~~~~~\n"
+echo -e "\n\t\t\t~~~~~ Done. ~~~~~\n"
 
 echo -e "\n\n~~~ Pipeline finished at $(date +'%H:%M:%S') ~~~\n\n"
